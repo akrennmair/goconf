@@ -17,7 +17,7 @@
 //
 // To read this configuration file, do:
 //
-//	c, err := configfile.ReadConfigFile("config.cfg");
+//	c, err := conf.ReadConfigFile("config.cfg");
 //	c.GetString("service-1", "url"); // result is string :http://www.example.com/some/path"
 //	c.GetInt("service-1", "maxclients"); // result is int 200
 //	c.GetBool("service-1", "delegation"); // result is bool true
@@ -28,7 +28,7 @@
 //
 // A new configuration file can also be created with:
 //
-//	c := configfile.NewConfigFile();
+//	c := conf.NewConfigFile();
 //	c.AddSection("section");
 //	c.AddOption("section", "option", "value");
 //	c.WriteConfigFile("config.cfg", 0644, "A header for this file"); // use 0644 as file permission

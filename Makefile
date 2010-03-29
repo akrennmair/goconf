@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.$(GOARCH)
 
-TARG=goconf.googlecode.com/hg/
+TARG=conf
 GOFILES=\
         conf.go\
 	get.go\

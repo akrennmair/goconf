@@ -22,6 +22,7 @@ func (c *ConfigFile) WriteConfigFile(fname string, perm int, header string) (err
 	return file.Close();
 }
 
+// WriteConfigBytes returns the configuration file.
 func (c *ConfigFile) WriteConfigBytes(header string) (config []byte) {
 	buf := bytes.NewBuffer(nil)
 	
@@ -30,6 +31,7 @@ func (c *ConfigFile) WriteConfigBytes(header string) (config []byte) {
 	return buf.Bytes()
 }
 
+// Writes the configuration file to the io.Writer.
 func (c *ConfigFile) Write(writer io.Writer, header string) (err os.Error) {
 	buf := bytes.NewBuffer(nil)
 	

@@ -1,49 +1,8 @@
 // This package implements a parser for configuration files.
 // This allows easy reading and writing of structured configuration files.
 //
-// Given a sample configuration file:
-//
-//	[default]
-//	host=www.example.com
-//	protocol=http://
-//	base-url=%(protocol)s%(host)s
-//
-//	[service-1]
-//	url=%(base-url)s/some/path
-//	delegation : on
-//	maxclients=200 # do not set this higher
-//	comments=This is a multi-line
-//		entry	; And this is a comment
-//
-// To read this configuration file, do:
-//
-//	c, err := conf.ReadConfigFile("config.cfg");
-//	c.GetString("service-1", "url"); // result is string :http://www.example.com/some/path"
-//	c.GetInt("service-1", "maxclients"); // result is int 200
-//	c.GetBool("service-1", "delegation"); // result is bool true
-//	c.GetString("service-1", "comments"); // result is string "This is a multi-line\nentry"
-//
-// Note the support for unfolding variables (such as %(base-url)s), which are read from the special
-// (reserved) section name [default].
-//
-// A new configuration file can also be created with:
-//
-//	c := conf.NewConfigFile();
-//	c.AddSection("section");
-//	c.AddOption("section", "option", "value");
-//	c.WriteConfigFile("config.cfg", 0644, "A header for this file"); // use 0644 as file permission
-//
-// This results in the file:
-//
-//	# A header for this file
-//	[section]
-//	option=value
-//
-// Note that sections and options are case-insensitive (values are case-sensitive)
-// and are converted to lowercase when saved to a file.
-//
-// The functionality and workflow is loosely based on the configparser.py package
-// of the Python Standard Library.
+// You can get some example configuration files and documentation at
+// http://code.google.com/p/goconf/
 package conf
 
 import (

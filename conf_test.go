@@ -15,8 +15,7 @@ active = false
 
 [service-1]
 port = 443
-url = http://%(host)s/something
-`
+url = http://%(host)s/something`
 
 type stringtest struct {
 	section string

@@ -48,13 +48,11 @@ func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
 	var section, option string;
 	section = "default"
 	for {
-		l, err := buf.ReadString('\n');	// parse line-by-line
-		if err == os.EOF {
-			break
-		} else if err != nil {
+		l, buferr := buf.ReadString('\n');	// parse line-by-line
+		if buferr != nil && buferr != os.EOF {
 			return err
 		}
-
+		
 		l = strings.TrimSpace(l);
 		// switch written for readability (not performance)
 		switch {
@@ -95,6 +93,11 @@ func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
 			default:
 				return ReadError{CouldNotParse, l}
 			}
+		}
+		
+		// Reached end of file
+		if buferr == os.EOF {
+			break
 		}
 	}
 	return nil;

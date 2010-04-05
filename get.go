@@ -23,6 +23,7 @@ func (c *ConfigFile) GetSections() (sections []string) {
 // HasSection checks if the configuration has the given section.
 // (The default section always exists.)
 func (c *ConfigFile) HasSection(section string) bool {
+	if section == "" {section = "default"}
 	_, ok := c.data[strings.ToLower(section)];
 
 	return ok;
@@ -33,6 +34,7 @@ func (c *ConfigFile) HasSection(section string) bool {
 // It returns an error if the section does not exist and an empty list if the section is empty.
 // Options within the default section are also included.
 func (c *ConfigFile) GetOptions(section string) (options []string, err os.Error) {
+	if section == "" {section = "default"}
 	section = strings.ToLower(section);
 
 	if _, ok := c.data[section]; !ok {
@@ -57,6 +59,7 @@ func (c *ConfigFile) GetOptions(section string) (options []string, err os.Error)
 // HasOption checks if the configuration has the given option in the section.
 // It returns false if either the option or section do not exist.
 func (c *ConfigFile) HasOption(section string, option string) bool {
+	if section == "" {section = "default"}
 	section = strings.ToLower(section);
 	option = strings.ToLower(option);
 
@@ -75,6 +78,8 @@ func (c *ConfigFile) HasOption(section string, option string) bool {
 // The raw string value is not subjected to unfolding, which was illustrated in the beginning of this documentation.
 // It returns an error if either the section or the option do not exist.
 func (c *ConfigFile) GetRawString(section string, option string) (value string, err os.Error) {
+	if section == "" {section = "default"}
+	
 	section = strings.ToLower(section);
 	option = strings.ToLower(option);
 

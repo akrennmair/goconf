@@ -1,8 +1,32 @@
 // This package implements a parser for configuration files.
 // This allows easy reading and writing of structured configuration files.
 //
-// You can get some example configuration files and documentation at
-// http://code.google.com/p/goconf/
+// Given the configuration file:
+//
+//	[default]
+//	host = example.com
+//	port = 443
+//	php = on
+//
+//	[service-1]
+//	host = s1.example.com
+//	allow-writing = false
+//
+// To read this configuration file, do:
+//
+//	c, err := conf.ReadConfigFile("server.conf")
+//	c.GetString("default", "host")               // returns example.com
+//	c.GetInt("", "port")                         // returns 443 (assumes "default")
+//	c.GetBool("", "php")                         // returns true
+//	c.GetString("service-1", "host")             // returns s1.example.com
+//	c.GetBool("service-1","allow-writing")       // returns false
+//	c.GetInt("service-1", "port")                // returns 0 and a GetError
+//
+// Note that all section and option names are case insensitive. All values are case
+// sensitive.
+//
+// Goconfig's string substitution syntax has not been removed. However, it may be
+// taken out or modified in the future.
 package conf
 
 import (

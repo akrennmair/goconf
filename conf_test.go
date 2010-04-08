@@ -1,6 +1,6 @@
 package conf_test
 
-import(
+import (
 	. "conf"
 	"testing"
 	"strconv"
@@ -19,23 +19,23 @@ url = http://%(host)s/something`
 
 type stringtest struct {
 	section string
-	option string
-	answer string
+	option  string
+	answer  string
 }
 
 type inttest struct {
 	section string
-	option string
-	answer int
+	option  string
+	answer  int
 }
 
 type booltest struct {
 	section string
-	option string
-	answer bool
+	option  string
+	answer  bool
 }
 
-var testSet = []interface{} {
+var testSet = []interface{}{
 	stringtest{"", "host", "example.com"},
 	inttest{"default", "port", 43},
 	booltest{"default", "compression", true},
@@ -52,33 +52,33 @@ func TestBuild(t *testing.T) {
 
 	for _, element := range testSet {
 		switch i := element.(type) {
-			case stringtest:
-				e := element.(stringtest)
-				ans, err := c.GetString(e.section, e.option)
-				if err != nil {
-					t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
-				}
-				if ans != e.answer {
-					t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer: " + ans)
-				}
-			case inttest:
-				e := element.(inttest)
-				ans, err := c.GetInt(e.section, e.option)
-				if err != nil {
-					t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
-				}
-				if ans != e.answer {
-					t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer: " + strconv.Itoa(ans))
-				}
-			case booltest:
-				e := element.(booltest)
-				ans, err := c.GetBool(e.section, e.option)
-				if err != nil {
-					t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
-				}
-				if ans != e.answer {
-					t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer")
-				}
+		case stringtest:
+			e := element.(stringtest)
+			ans, err := c.GetString(e.section, e.option)
+			if err != nil {
+				t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
+			}
+			if ans != e.answer {
+				t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer: " + ans)
+			}
+		case inttest:
+			e := element.(inttest)
+			ans, err := c.GetInt(e.section, e.option)
+			if err != nil {
+				t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
+			}
+			if ans != e.answer {
+				t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer: " + strconv.Itoa(ans))
+			}
+		case booltest:
+			e := element.(booltest)
+			ans, err := c.GetBool(e.section, e.option)
+			if err != nil {
+				t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
+			}
+			if ans != e.answer {
+				t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer")
+			}
 		}
 	}
 }

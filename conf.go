@@ -39,7 +39,7 @@ import (
 // ConfigFile is the representation of configuration settings.
 // The public interface is entirely through methods.
 type ConfigFile struct {
-	data map[string]map[string]string;	// Maps sections to options to values.
+	data map[string]map[string]string // Maps sections to options to values.
 }
 
 const (
@@ -56,61 +56,61 @@ const (
 )
 
 var (
-	DefaultSection	= "default";	// Default section name (must be lower-case).
-	DepthValues	= 200;		// Maximum allowed depth when recursively substituing variable names.
+	DefaultSection = "default" // Default section name (must be lower-case).
+	DepthValues    = 200       // Maximum allowed depth when recursively substituing variable names.
 
 	// Strings accepted as bool.
-	BoolStrings	= map[string]bool{
-		"t": true,
-		"true": true,
-		"y": true,
-		"yes": true,
-		"on": true,
-		"1": true,
-		"f": false,
+	BoolStrings = map[string]bool{
+		"t":     true,
+		"true":  true,
+		"y":     true,
+		"yes":   true,
+		"on":    true,
+		"1":     true,
+		"f":     false,
 		"false": false,
-		"n": false,
-		"no": false,
-		"off": false,
-		"0": false,
-	};
+		"n":     false,
+		"no":    false,
+		"off":   false,
+		"0":     false,
+	}
 
-	varRegExp	= regexp.MustCompile(`%\(([a-zA-Z0-9_.\-]+)\)s`);
+	varRegExp = regexp.MustCompile(`%\(([a-zA-Z0-9_.\-]+)\)s`)
 )
 
 
 // AddSection adds a new section to the configuration.
 // It returns true if the new section was inserted, and false if the section already existed.
 func (c *ConfigFile) AddSection(section string) bool {
-	section = strings.ToLower(section);
+	section = strings.ToLower(section)
 
 	if _, ok := c.data[section]; ok {
 		return false
 	}
-	c.data[section] = make(map[string]string);
+	c.data[section] = make(map[string]string)
 
-	return true;
+	return true
 }
 
 
 // RemoveSection removes a section from the configuration.
 // It returns true if the section was removed, and false if section did not exist.
 func (c *ConfigFile) RemoveSection(section string) bool {
-	section = strings.ToLower(section);
+	section = strings.ToLower(section)
 
 	switch _, ok := c.data[section]; {
 	case !ok:
 		return false
 	case section == DefaultSection:
-		return false	// default section cannot be removed
+		return false // default section cannot be removed
 	default:
 		for o, _ := range c.data[section] {
 			c.data[section][o] = "", false
 		}
-		c.data[section] = nil, false;
+		c.data[section] = nil, false
 	}
 
-	return true;
+	return true
 }
 
 
@@ -118,15 +118,15 @@ func (c *ConfigFile) RemoveSection(section string) bool {
 // It returns true if the option and value were inserted, and false if the value was overwritten.
 // If the section does not exist in advance, it is created.
 func (c *ConfigFile) AddOption(section string, option string, value string) bool {
-	c.AddSection(section);	// make sure section exists
+	c.AddSection(section) // make sure section exists
 
-	section = strings.ToLower(section);
-	option = strings.ToLower(option);
+	section = strings.ToLower(section)
+	option = strings.ToLower(option)
 
-	_, ok := c.data[section][option];
-	c.data[section][option] = value;
+	_, ok := c.data[section][option]
+	c.data[section][option] = value
 
-	return !ok;
+	return !ok
 }
 
 
@@ -134,17 +134,17 @@ func (c *ConfigFile) AddOption(section string, option string, value string) bool
 // It returns true if the option and value were removed, and false otherwise,
 // including if the section did not exist.
 func (c *ConfigFile) RemoveOption(section string, option string) bool {
-	section = strings.ToLower(section);
-	option = strings.ToLower(option);
+	section = strings.ToLower(section)
+	option = strings.ToLower(option)
 
 	if _, ok := c.data[section]; !ok {
 		return false
 	}
 
-	_, ok := c.data[section][option];
-	c.data[section][option] = "", false;
+	_, ok := c.data[section][option]
+	c.data[section][option] = "", false
 
-	return ok;
+	return ok
 }
 
 
@@ -152,12 +152,12 @@ func (c *ConfigFile) RemoveOption(section string, option string) bool {
 // This representation can be filled with AddSection and AddOption and then
 // saved to a file using WriteConfigFile.
 func NewConfigFile() *ConfigFile {
-	c := new(ConfigFile);
-	c.data = make(map[string]map[string]string);
+	c := new(ConfigFile)
+	c.data = make(map[string]map[string]string)
 
-	c.AddSection(DefaultSection);	// default section always exists
+	c.AddSection(DefaultSection) // default section always exists
 
-	return c;
+	return c
 }
 
 
@@ -168,7 +168,7 @@ func stripComments(l string) string {
 			l = l[0:i]
 		}
 	}
-	return l;
+	return l
 }
 
 
@@ -180,44 +180,44 @@ func firstIndex(s string, delim []byte) int {
 			}
 		}
 	}
-	return -1;
+	return -1
 }
 
 type GetError struct {
-	Reason int
+	Reason    int
 	ValueType string
-	Value string
-	Section string
-	Option string
+	Value     string
+	Section   string
+	Option    string
 }
 
 func (err GetError) String() string {
 	switch err.Reason {
-		case SectionNotFound:
-			return fmt.Sprintf("section '%s' not found", err.Section)
-		case OptionNotFound:
-			return fmt.Sprintf("option '%s' not found in section '%s'", err.Option, err.Section)
-		case CouldNotParse:
-			return fmt.Sprintf("could not parse %s value '%s'", err.ValueType, err.Value)
-		case MaxDepthReached:
-			return fmt.Sprintf("possible cycle while unfolding variables: max depth of %d reached", DepthValues)
+	case SectionNotFound:
+		return fmt.Sprintf("section '%s' not found", err.Section)
+	case OptionNotFound:
+		return fmt.Sprintf("option '%s' not found in section '%s'", err.Option, err.Section)
+	case CouldNotParse:
+		return fmt.Sprintf("could not parse %s value '%s'", err.ValueType, err.Value)
+	case MaxDepthReached:
+		return fmt.Sprintf("possible cycle while unfolding variables: max depth of %d reached", DepthValues)
 	}
-	
+
 	return "invalid get error"
 }
 
 type ReadError struct {
 	Reason int
-	Line string
+	Line   string
 }
 
 func (err ReadError) String() string {
 	switch err.Reason {
-		case BlankSection:
-			return "empty section name not allowed"
-		case CouldNotParse:
-			return fmt.Sprintf("could not parse line: %s", err.Line)
+	case BlankSection:
+		return "empty section name not allowed"
+	case CouldNotParse:
+		return fmt.Sprintf("could not parse line: %s", err.Line)
 	}
-	
+
 	return "invalid read error"
 }

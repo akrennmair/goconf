@@ -10,7 +10,7 @@ import (
 // The desired file permissions must be passed as in os.Open.
 // The header is a string that is saved as a comment in the first line of the file.
 func (c *ConfigFile) WriteConfigFile(fname string, perm int, header string) (err os.Error) {
-	var file *os.File;
+	var file *os.File
 
 	if file, err = os.Open(fname, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, perm); err != nil {
 		return err
@@ -19,22 +19,22 @@ func (c *ConfigFile) WriteConfigFile(fname string, perm int, header string) (err
 		return err
 	}
 
-	return file.Close();
+	return file.Close()
 }
 
 // WriteConfigBytes returns the configuration file.
 func (c *ConfigFile) WriteConfigBytes(header string) (config []byte) {
 	buf := bytes.NewBuffer(nil)
-	
+
 	c.Write(buf, header)
-	
+
 	return buf.Bytes()
 }
 
 // Writes the configuration file to the io.Writer.
 func (c *ConfigFile) Write(writer io.Writer, header string) (err os.Error) {
 	buf := bytes.NewBuffer(nil)
-	
+
 	if header != "" {
 		if _, err = buf.WriteString("# " + header + "\n"); err != nil {
 			return err
@@ -43,7 +43,7 @@ func (c *ConfigFile) Write(writer io.Writer, header string) (err os.Error) {
 
 	for section, sectionmap := range c.data {
 		if section == DefaultSection && len(sectionmap) == 0 {
-			continue	// skip default section if empty
+			continue // skip default section if empty
 		}
 		if _, err = buf.WriteString("[" + section + "]\n"); err != nil {
 			return err
@@ -57,8 +57,8 @@ func (c *ConfigFile) Write(writer io.Writer, header string) (err os.Error) {
 			return err
 		}
 	}
-	
+
 	buf.WriteTo(writer)
 
-	return nil;
+	return nil
 }

@@ -49,11 +49,18 @@ func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
 	section = "default"
 	for {
 		l, buferr := buf.ReadString('\n') // parse line-by-line
-		if buferr != nil && buferr != os.EOF {
-			return err
+		l = strings.TrimSpace(l)
+
+		if buferr != nil {
+			if buferr != os.EOF {
+				return err
+			}
+
+			if len(l) == 0 {
+				break
+			}
 		}
 
-		l = strings.TrimSpace(l)
 		// switch written for readability (not performance)
 		switch {
 		case len(l) == 0: // empty line

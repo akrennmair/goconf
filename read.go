@@ -84,10 +84,10 @@ func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
 			return ReadError{BlankSection, l}
 
 		default: // other alternatives
-			i := firstIndex(l, []byte{'=', ':'})
+			i := strings.IndexAny(l, "=:")
 			switch {
 			case i > 0: // option and value
-				i := firstIndex(l, []byte{'=', ':'})
+				i := strings.IndexAny(l, "=:")
 				option = strings.TrimSpace(l[0:i])
 				value := strings.TrimSpace(stripComments(l[i+1:]))
 				c.AddOption(section, option, value)

@@ -160,17 +160,6 @@ func NewConfigFile() *ConfigFile {
 	return c
 }
 
-func firstIndex(s string, delim []byte) int {
-	for i := 0; i < len(s); i++ {
-		for j := 0; j < len(delim); j++ {
-			if s[i] == delim[j] {
-				return i
-			}
-		}
-	}
-	return -1
-}
-
 type GetError struct {
 	Reason    int
 	ValueType string

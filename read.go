@@ -109,3 +109,13 @@ func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
 	}
 	return nil
 }
+
+func stripComments(l string) string {
+	// comments are preceded by space or TAB
+	for _, c := range []string{" ;", "\t;", " #", "\t#"} {
+		if i := strings.Index(l, c); i != -1 {
+			l = l[0:i]
+		}
+	}
+	return l
+}

@@ -159,12 +159,12 @@ func (c *ConfigFile) GetInt(section string, option string) (value int, err os.Er
 
 
 // GetFloat has the same behaviour as GetString but converts the response to float.
-func (c *ConfigFile) GetFloat(section string, option string) (value float, err os.Error) {
+func (c *ConfigFile) GetFloat64(section string, option string) (value float64, err os.Error) {
 	sv, err := c.GetString(section, option)
 	if err == nil {
-		value, err = strconv.Atof(sv)
+		value, err = strconv.Atof64(sv)
 		if err != nil {
-			err = GetError{CouldNotParse, "float", sv, section, option}
+			err = GetError{CouldNotParse, "float64", sv, section, option}
 		}
 	}
 

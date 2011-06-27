@@ -13,7 +13,7 @@ import (
 func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
 	var file *os.File
 
-	if file, err = os.Open(fname, os.O_RDONLY, 0); err != nil {
+	if file, err = os.Open(fname); err != nil {
 		return nil, err
 	}
 

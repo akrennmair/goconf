@@ -171,13 +171,13 @@ type GetError struct {
 func (err GetError) String() string {
 	switch err.Reason {
 	case SectionNotFound:
-		return fmt.Sprintf("section '%s' not found", err.Section)
+		return fmt.Sprintf("section '%s' not found", string(err.Section))
 	case OptionNotFound:
-		return fmt.Sprintf("option '%s' not found in section '%s'", err.Option, err.Section)
+		return fmt.Sprintf("option '%s' not found in section '%s'", string(err.Option), string(err.Section))
 	case CouldNotParse:
-		return fmt.Sprintf("could not parse %s value '%s'", err.ValueType, err.Value)
+		return fmt.Sprintf("could not parse %s value '%s'", string(err.ValueType), string(err.Value))
 	case MaxDepthReached:
-		return fmt.Sprintf("possible cycle while unfolding variables: max depth of %d reached", DepthValues)
+		return fmt.Sprintf("possible cycle while unfolding variables: max depth of %d reached", int(DepthValues))
 	}
 
 	return "invalid get error"
@@ -193,7 +193,7 @@ func (err ReadError) String() string {
 	case BlankSection:
 		return "empty section name not allowed"
 	case CouldNotParse:
-		return fmt.Sprintf("could not parse line: %s", err.Line)
+		return fmt.Sprintf("could not parse line: %s", string(err.Line))
 	}
 
 	return "invalid read error"

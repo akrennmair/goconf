@@ -1,9 +1,8 @@
 package conf
 
 import (
-	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 // GetSections returns the list of sections in the configuration.
@@ -31,11 +30,10 @@ func (c *ConfigFile) HasSection(section string) bool {
 	return ok
 }
 
-
 // GetOptions returns the list of options available in the given section.
 // It returns an error if the section does not exist and an empty list if the section is empty.
 // Options within the default section are also included.
-func (c *ConfigFile) GetOptions(section string) (options []string, err os.Error) {
+func (c *ConfigFile) GetOptions(section string) (options []string, err error) {
 	if section == "" {
 		section = "default"
 	}
@@ -59,7 +57,6 @@ func (c *ConfigFile) GetOptions(section string) (options []string, err os.Error)
 	return options, nil
 }
 
-
 // HasOption checks if the configuration has the given option in the section.
 // It returns false if either the option or section do not exist.
 func (c *ConfigFile) HasOption(section string, option string) bool {
@@ -79,11 +76,10 @@ func (c *ConfigFile) HasOption(section string, option string) bool {
 	return okd || oknd
 }
 
-
 // GetRawString gets the (raw) string value for the given option in the section.
 // The raw string value is not subjected to unfolding, which was illustrated in the beginning of this documentation.
 // It returns an error if either the section or the option do not exist.
-func (c *ConfigFile) GetRawString(section string, option string) (value string, err os.Error) {
+func (c *ConfigFile) GetRawString(section string, option string) (value string, err error) {
 	if section == "" {
 		section = "default"
 	}
@@ -100,12 +96,11 @@ func (c *ConfigFile) GetRawString(section string, option string) (value string, 
 	return "", GetError{SectionNotFound, "", "", section, option}
 }
 
-
 // GetString gets the string value for the given option in the section.
 // If the value needs to be unfolded (see e.g. %(host)s example in the beginning of this documentation),
 // then GetString does this unfolding automatically, up to DepthValues number of iterations.
 // It returns an error if either the section or the option do not exist, or the unfolding cycled.
-func (c *ConfigFile) GetString(section string, option string) (value string, err os.Error) {
+func (c *ConfigFile) GetString(section string, option string) (value string, err error) {
 	value, err = c.GetRawString(section, option)
 	if err != nil {
 		return "", err
@@ -143,9 +138,8 @@ func (c *ConfigFile) GetString(section string, option string) (value string, err
 	return value, nil
 }
 
-
 // GetInt has the same behaviour as GetString but converts the response to int.
-func (c *ConfigFile) GetInt(section string, option string) (value int, err os.Error) {
+func (c *ConfigFile) GetInt(section string, option string) (value int, err error) {
 	sv, err := c.GetString(section, option)
 	if err == nil {
 		value, err = strconv.Atoi(sv)
@@ -157,12 +151,11 @@ func (c *ConfigFile) GetInt(section string, option string) (value int, err os.Er
 	return value, err
 }
 
-
 // GetFloat has the same behaviour as GetString but converts the response to float.
-func (c *ConfigFile) GetFloat64(section string, option string) (value float64, err os.Error) {
+func (c *ConfigFile) GetFloat64(section string, option string) (value float64, err error) {
 	sv, err := c.GetString(section, option)
 	if err == nil {
-		value, err = strconv.Atof64(sv)
+		value, err = strconv.ParseFloat(sv, 64)
 		if err != nil {
 			err = GetError{CouldNotParse, "float64", sv, section, option}
 		}
@@ -171,10 +164,9 @@ func (c *ConfigFile) GetFloat64(section string, option string) (value float64, e
 	return value, err
 }
 
-
 // GetBool has the same behaviour as GetString but converts the response to bool.
 // See constant BoolStrings for string values converted to bool.
-func (c *ConfigFile) GetBool(section string, option string) (value bool, err os.Error) {
+func (c *ConfigFile) GetBool(section string, option string) (value bool, err error) {
 	sv, err := c.GetString(section, option)
 	if err != nil {
 		return false, err

@@ -1,16 +1,16 @@
 package conf
 
 import (
+	"bufio"
+	"bytes"
 	"io"
 	"os"
-	"bytes"
-	"bufio"
 	"strings"
 )
 
 // ReadConfigFile reads a file and returns a new configuration representation.
 // This representation can be queried with GetString, etc.
-func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
+func ReadConfigFile(fname string) (c *ConfigFile, err error) {
 	var file *os.File
 
 	if file, err = os.Open(fname); err != nil {
@@ -29,7 +29,7 @@ func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
 	return c, nil
 }
 
-func ReadConfigBytes(conf []byte) (c *ConfigFile, err os.Error) {
+func ReadConfigBytes(conf []byte) (c *ConfigFile, err error) {
 	buf := bytes.NewBuffer(conf)
 
 	c = NewConfigFile()
@@ -42,7 +42,7 @@ func ReadConfigBytes(conf []byte) (c *ConfigFile, err os.Error) {
 
 // Read reads an io.Reader and returns a configuration representation. This
 // representation can be queried with GetString, etc.
-func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
+func (c *ConfigFile) Read(reader io.Reader) (err error) {
 	buf := bufio.NewReader(reader)
 
 	var section, option string
@@ -52,7 +52,7 @@ func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
 		l = strings.TrimSpace(l)
 
 		if buferr != nil {
-			if buferr != os.EOF {
+			if buferr != io.EOF {
 				return err
 			}
 
@@ -103,7 +103,7 @@ func (c *ConfigFile) Read(reader io.Reader) (err os.Error) {
 		}
 
 		// Reached end of file
-		if buferr == os.EOF {
+		if buferr == io.EOF {
 			break
 		}
 	}

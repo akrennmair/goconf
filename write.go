@@ -1,15 +1,15 @@
 package conf
 
 import (
-	"os"
-	"io"
 	"bytes"
+	"io"
+	"os"
 )
 
 // WriteConfigFile saves the configuration representation to a file.
 // The desired file permissions must be passed as in os.Open.
 // The header is a string that is saved as a comment in the first line of the file.
-func (c *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (err os.Error) {
+func (c *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (err error) {
 	var file *os.File
 
 	if file, err = os.Create(fname); err != nil {
@@ -32,7 +32,7 @@ func (c *ConfigFile) WriteConfigBytes(header string) (config []byte) {
 }
 
 // Writes the configuration file to the io.Writer.
-func (c *ConfigFile) Write(writer io.Writer, header string) (err os.Error) {
+func (c *ConfigFile) Write(writer io.Writer, header string) (err error) {
 	buf := bytes.NewBuffer(nil)
 
 	if header != "" {

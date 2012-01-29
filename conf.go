@@ -105,9 +105,9 @@ func (c *ConfigFile) RemoveSection(section string) bool {
 		return false // default section cannot be removed
 	default:
 		for o, _ := range c.data[section] {
-			c.data[section][o] = "", false
+			delete(c.data[section], o)
 		}
-		c.data[section] = nil, false
+		delete(c.data, section)
 	}
 
 	return true
@@ -142,7 +142,7 @@ func (c *ConfigFile) RemoveOption(section string, option string) bool {
 	}
 
 	_, ok := c.data[section][option]
-	c.data[section][option] = "", false
+	delete(c.data[section], option)
 
 	return ok
 }
@@ -168,7 +168,7 @@ type GetError struct {
 	Option    string
 }
 
-func (err GetError) String() string {
+func (err GetError) Error() string {
 	switch err.Reason {
 	case SectionNotFound:
 		return fmt.Sprintf("section '%s' not found", string(err.Section))
@@ -188,7 +188,7 @@ type ReadError struct {
 	Line   string
 }
 
-func (err ReadError) String() string {
+func (err ReadError) Error() string {
 	switch err.Reason {
 	case BlankSection:
 		return "empty section name not allowed"

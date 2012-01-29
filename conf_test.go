@@ -48,16 +48,16 @@ var testSet = []interface{}{
 func TestBuild(t *testing.T) {
 	c, err := ReadConfigBytes([]byte(confFile))
 	if err != nil {
-		t.Error(err.String())
+		t.Error(err.Error())
 	}
 
 	for _, element := range testSet {
-		switch i := element.(type) {
+		switch element.(type) {
 		case stringtest:
 			e := element.(stringtest)
 			ans, err := c.GetString(e.section, e.option)
 			if err != nil {
-				t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
+				t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.Error())
 			}
 			if ans != e.answer {
 				t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer: " + ans)
@@ -66,7 +66,7 @@ func TestBuild(t *testing.T) {
 			e := element.(inttest)
 			ans, err := c.GetInt(e.section, e.option)
 			if err != nil {
-				t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
+				t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.Error())
 			}
 			if ans != e.answer {
 				t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer: " + strconv.Itoa(ans))
@@ -75,7 +75,7 @@ func TestBuild(t *testing.T) {
 			e := element.(booltest)
 			ans, err := c.GetBool(e.section, e.option)
 			if err != nil {
-				t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.String())
+				t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.Error())
 			}
 			if ans != e.answer {
 				t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned incorrect answer")
